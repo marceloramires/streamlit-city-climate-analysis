@@ -1,40 +1,26 @@
-import altair as alt
-import numpy as np
-import pandas as pd
+# import altair as alt
+# import numpy as np
+# import pandas as pd
 import streamlit as st
 
 """
-# Welcome to Streamlit!
+# City weather analysis
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+test text
 
-In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+num_points = st.slider("Temperature threshold (°C)", -100, 100, 18)
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
-
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
-
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
-
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+conn = st.experimental_connection('GLOBAL_WEATHER__CLIMATE_DATA_FOR_BI')
+query = """
+    SELECT 
+        DOY_STD,
+        (AVG_OF__DAILY_AVG_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS AVG_TEMP_C,
+        (AVG_OF__DAILY_MAX_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS MAX_TEMP_C,
+        (AVG_TEMP_C + MAX_TEMP_C) / 2 AS DAY_TEMP_C
+    FROM STANDARD_TILE.CLIMATOLOGY_DAY 
+    WHERE POSTAL_CODE = '98126' -- Seattle
+"""
+climatology_data = conn.query(query)
+st.dataframe(climatology_data)
