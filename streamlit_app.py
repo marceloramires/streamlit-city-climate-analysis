@@ -30,7 +30,7 @@ def query_days():
     days = climatology_data.where(climatology_data["DAY_TEMP_C"] >= temp_threshold).count()[0]
     return days
 
-temp_threshold = st.slider("Temperature threshold (°C)", 10, 50, 18, on_change=query_days)
+temp_threshold = st.slider("Temperature threshold (°C)", 0, 50, 18, on_change=query_days)
 days = query_days()
 
 """
@@ -40,7 +40,7 @@ The horizontal white line is your threshold
 
 """
 
-st.write("There are " + str(days) + " on average at or above " + str(temp_threshold) + " °C a year in Seattle.")
+st.write("There are " + str(days) + " days on average at or above " + str(temp_threshold) + " °C a year in Seattle.")
 
 alt_chart = (
    alt.Chart(climatology_data)
