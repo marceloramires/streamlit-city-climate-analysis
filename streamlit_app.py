@@ -9,20 +9,23 @@ Select your temperature threshold for which you want to find how many days a yea
 
 """
 
+@st.cache_data
+def fetch_data():
+    conn = st.connection('snowflake')
+    query = """
+        SELECT 
+            DOY_STD,
+            (AVG_OF__DAILY_AVG_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS AVG_TEMP_C,
+            (AVG_OF__DAILY_MAX_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS MAX_TEMP_C,
+            (AVG_TEMP_C + MAX_TEMP_C) / 2 AS DAY_TEMP_C
+        FROM STANDARD_TILE.CLIMATOLOGY_DAY 
+        WHERE POSTAL_CODE = '98126' -- Seattle
+        ORDER BY DOY_STD ASC
+    """
+    climatology_data = conn.query(query)
+    return climatology_data
 
-
-conn = st.connection('snowflake')
-query = """
-    SELECT 
-        DOY_STD,
-        (AVG_OF__DAILY_AVG_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS AVG_TEMP_C,
-        (AVG_OF__DAILY_MAX_TEMPERATURE_FEELSLIKE_F - 32) * 5.0 / 9 AS MAX_TEMP_C,
-        (AVG_TEMP_C + MAX_TEMP_C) / 2 AS DAY_TEMP_C
-    FROM STANDARD_TILE.CLIMATOLOGY_DAY 
-    WHERE POSTAL_CODE = '98126' -- Seattle
-    ORDER BY DOY_STD ASC
-"""
-climatology_data = conn.query(query)
+climatology_data = fetch_data()
 #st.line_chart(climatology_data, x="DOY_STD")
 days = 1
 
@@ -36,7 +39,7 @@ days = query_days()
 """
 ## Temperature chart
 
-The horizontal white line is your threshold
+The horizontal green line is your threshold
 
 """
 
