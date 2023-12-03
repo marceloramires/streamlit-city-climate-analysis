@@ -54,7 +54,7 @@ st.markdown("There are <span class=\"big-font\">**" + str(days) + "**</span> day
 st.write("There are 3 lines in the chart:")
 st.markdown("""● The <span style='color:#7F3FE0'>purple</span> line is the maximum temperature of that day.<br/>
             ● The <span style='color:#D32234'>red</span> line is 'Day temperature', is obtained by averaging the two other lines.<br/>
-            ● The <span style='color:#3F50E0'>blue</span> line is the mean temperature of that day.""",unsafe_allow_html=True)
+            ● The <span style='color:#3F50E0'>blue</span> line is the average temperature of that day.""",unsafe_allow_html=True)
 
 st.write("Here we're looking for how many days in the red line are above the threshold.")
 
