@@ -50,7 +50,7 @@ chart = alt.layer(
     alt_chart.mark_line(color='#6822D3').encode(y='MAX_TEMP_C'),
     alt_chart.mark_line(color='#D32234').encode(y='DAY_TEMP_C'),
     alt_chart.mark_line(color='#2234D3').encode(y='AVG_TEMP_C'),
-    alt_chart.mark_rule(color='white').encode(x=alt.datum(0),x2=alt.datum(365), y=alt.datum(temp_threshold))
+    alt_chart.mark_rule(color='#2BAF1C').encode(x=alt.datum(0),x2=alt.datum(365), y=alt.datum(temp_threshold))
 )
 
 
