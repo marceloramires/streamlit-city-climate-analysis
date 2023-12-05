@@ -1,6 +1,5 @@
 import altair as alt
 import streamlit as st
-import altair as alt
 
 """
 # City Climate Analysis
